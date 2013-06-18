@@ -5,7 +5,7 @@ This is a simple PHP deploy script. It clones a git repository locally, checks o
 Requires PHP >= 5.3 (earlier versions untested)
 
 ### Command Line Format
-At the command line call the deploy script and specify the tag (eg, v3.5), the commit (eg, da83f01) or the branch to deploy. If you don't specify any of these, the latest code on the default branch will be used.
+At the command line call the deploy script and specify the tag (eg, v3.5), the commit (eg, da83f01) or the branch to deploy. If you don't specify any of these, the latest code (HEAD) will be used.
 
 `php deploy.php (options) (tag|commit|branch)`
 

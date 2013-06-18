@@ -55,8 +55,23 @@ $config = json_decode($config, true);
 if (!is_array($config)) errorExit('Config file not valid JSON or is empty.' ."\n");
 if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository not specified in config file.' ."\n");
 
+if (!$tag) {
+	
+	$tag = 'default/master';
+	
+	$res = shell_exec('git ls-remote '. $config['repo']);
+	
+	$stringArray = explode("\n", $res);
+	$lineArray = explode(" ", $stringArray[0]);
+	$tag = trim($lineArray[0]);
+	
+	if (strlen($tag) != 40) 
+		errorExit('Config not identify last commit: ' ."\n", $stringArray);
+		
+}
+ 
 fwrite(STDOUT, "Deploying repository: ". $config['repo'] ."\n");
-fwrite(STDOUT, "Selected tag: ". $tag ."\n");
+fwrite(STDOUT, "Selected tag/ref: ". $tag ."\n");
 
 $workingDir = dirname(WEB_ROOT);
 $newFolder = 'html_'. preg_replace('/[^A-Za-z0-9\.\-_]+/', '_', $tag);
