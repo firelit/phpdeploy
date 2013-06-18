@@ -22,4 +22,4 @@ Should be JSON and contain the following keys.
 
 Notes
 -----
-Uses git, thus git must be installed on the server. It is also beneficial to have setup deployment keys on the repository so that no github/ssh login is required when cloning. Alternatively, you may be able to use [SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding) with this script, but it has not been tested.
+Uses git, thus git must be installed on the server. It is also beneficial to have setup deployment keys on the repository so that a github/ssh login is not required when cloning. Alternatively, you may be able to use [SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding) with this script, but it has not been tested.
