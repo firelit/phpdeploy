@@ -14,7 +14,7 @@ Requires PHP version 5.3 (untested below)
 
 Config File
 -----------
-A config file is required as defined at the `CONFIG_FILE` location (defaults to `/var/www/deploy.json`).
+A config file is required at the defined `CONFIG_FILE` location (defaults to `/var/www/deploy.json`).
 
 Should be JSON and contain the following keys.
 - repo: the repo's SSH link (eg, "git@github.com:myusername/myrepositoryname.git")
