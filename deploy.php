@@ -1,20 +1,59 @@
 #!/usr/bin/php
 <?PHP
 
-define('WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
-define('CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
+define('DEFAULT_WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
+define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
 
-if (!isset($argv[1])) die('No commit tag (eg, version number).' ."\n");
+// Remove script name
+array_shift($argv);
 
-$tag = $argv[1];
+$webRoot = DEFAULT_WEB_ROOT;
+$configFile = DEFAULT_CONFIG_FILE;
+$tag = false;
 
-if (!file_exists(CONFIG_FILE) || !is_readable(CONFIG_FILE)) die('Config file does not exist or is not readable: '. CONFIG_FILE ."\n");
+do {
+	
+	$arg = current($argv);
+	
+	if ($arg === false) // No more arguements
+		break;
+		
+	if ($arg == '-f') {
+		// Config file option
+		
+		$configFile = next($argv);
+		
+		if ($configFile === false)
+			errorExit('Invalid config file specified.');
+		
+	} elseif ($arg == '-w') {
+		// Web root option
+		
+		$configFile = next($argv);
+		
+		if ($configFile === false)
+			errorExit('Invalid web root specified.');
+		
+	} elseif (!$tag) {
+		// Tag/commit/branch not set, must be this
+		
+		$tag = $arg;
+		
+	} else {
+		
+		errorExit('Invalid argument specified: '. $arg);
+		
+	}
+	
+} while (next($argv));
 
-$config = file_get_contents(CONFIG_FILE);
+if (!file_exists($configFile) || !is_readable($configFile)) errorExit('Config file does not exist or is not readable: '. $configFile ."\n");
+
+$config = file_get_contents($configFile);
 $config = json_decode($config, true);
 
-if (!is_array($config)) die('Config file not valid JSON or is empty.' ."\n");
-if (!isset($config['repo']) || !strlen($config['repo'])) die('Repository not specified in config file.' ."\n");
+if (!is_array($config)) errorExit('Config file not valid JSON or is empty.' ."\n");
+if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository not specified in config file.' ."\n");
 
 fwrite(STDOUT, "Deploying repository: ". $config['repo'] ."\n");
 fwrite(STDOUT, "Selected tag: ". $tag ."\n");
@@ -32,11 +71,8 @@ if (!is_dir($newFolderAbs)) {
 
 	exec('git clone '. $config['repo'] .' '. $newFolderAbs, $out, $res);
 	
-	if ($res !== 0) {
-		fwrite(STDOUT, "Error: Git clone problem\n");
-		fwrite(STDOUT, implode("\n", $out) ."\n");
-		die;
-	}
+	if ($res !== 0)
+		errorExit("Error: Git clone problem", implode("\n", $out));
 	
 }
 
@@ -47,11 +83,8 @@ fwrite(STDOUT, "Checking out tag..." ."\n");
 
 exec('git checkout '. $tag, $out, $res);
 
-if ($res !== 0) {
-	fwrite(STDOUT, "Error: Git checkout problem\n");
-	fwrite(STDOUT, implode("\n", $out) ."\n");
-	die;
-}
+if ($res !== 0)
+	errorExit("Error: Git checkout problem", implode("\n", $out));
 
 if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
@@ -65,11 +98,8 @@ if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 		
 		exec($command, $out, $res);
 			
-		if ($res !== 0) {
-			fwrite(STDOUT, "Error: Command could not be executed\n");
-			fwrite(STDOUT, implode("\n", $out) ."\n");
-			die;
-		}
+		if ($res !== 0)
+			errorExit("Error: Command could not be executed", implode("\n", $out));
 
 	}
 	
@@ -81,11 +111,8 @@ if (!is_link(WEB_ROOT) && is_dir(WEB_ROOT)) {
 	
 	exec('mv '. WEB_ROOT .' '. dirname(WEB_ROOT) . DIRECTORY_SEPARATOR .'html_orig', $out, $res);
 	
-	if ($res !== 0) {
-		fwrite(STDOUT, "Error: Could not move web root folder\n");
-		fwrite(STDOUT, implode("\n", $out) ."\n");
-		die;
-	}
+	if ($res !== 0) 
+		errorExit("Error: Could not move web root folder", implode("\n", $out));
 
 }
 
@@ -95,11 +122,8 @@ if (is_link(WEB_ROOT)) {
 	
 	exec('unlink '. WEB_ROOT, $out, $res);
 	
-	if ($res !== 0) {
-		fwrite(STDOUT, "Error: Current symbolic link could not be removed\n");
-		fwrite(STDOUT, implode("\n", $out) ."\n");
-		die;
-	}
+	if ($res !== 0)
+		errorExit("Error: Current symbolic link could not be removed", implode("\n", $out));
 
 }
 
@@ -107,10 +131,13 @@ fwrite(STDOUT, "Re-linking web folder..." ."\n");
 
 exec('ln -s '. $newFolderAbs .' '. $workingDir . DIRECTORY_SEPARATOR .'html', $out, $res);
 
-if ($res !== 0) {
-	fwrite(STDOUT, "Error: Could not symbolically linking new folder\n");
-	fwrite(STDOUT, implode("\n", $out) ."\n");
-	die;
-}
+if ($res !== 0)
+	errorExit("Error: Could not symbolically linking new folder", implode("\n", $out));
 
 fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
+
+function errorExit($string, $errInfo = false) {
+	fwrite(STDERR, $string ."\n");
+	if ($errInfo) fwrite(STDERR, $errInfo ."\n");
+	exit(1);
+}
