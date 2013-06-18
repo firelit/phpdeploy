@@ -29,9 +29,9 @@ do {
 	} elseif ($arg == '-w') {
 		// Web root option
 		
-		$configFile = next($argv);
+		$webRoot = next($argv);
 		
-		if ($configFile === false)
+		if ($webRoot === false)
 			errorExit('Invalid web root specified.');
 		
 	} elseif (!$tag) {
