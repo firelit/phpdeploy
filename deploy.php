@@ -61,12 +61,15 @@ if (!$tag) {
 	
 	$res = shell_exec('git ls-remote '. $config['repo']);
 	
+	if (is_null($res)) 
+		errorExit('Config could not connect to repo: ' . $config['repo']);
+	
 	$stringArray = explode("\n", $res);
 	$lineArray = explode(" ", $stringArray[0]);
 	$tag = trim($lineArray[0]);
 	
-	if (strlen($tag) != 40) 
-		errorExit('Config not identify last commit: ' ."\n", $stringArray);
+	if (!preg_match('^[A-fa-f0-9]{40}$/', $tag)) 
+		errorExit("Error: Could not identify last commit", implode("\n", $stringArray));
 		
 }
  
