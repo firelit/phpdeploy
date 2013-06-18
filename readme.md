@@ -30,4 +30,4 @@ Uses git, thus git must be installed on the server. It is also beneficial to hav
 
 ### License
 
-(Open Source, MIT: http://opensource.org/licenses/MIT)[http://opensource.org/licenses/MIT]
+[Open Source, MIT: http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)
