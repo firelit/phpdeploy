@@ -65,7 +65,7 @@ if (!$tag) {
 		errorExit('Config could not connect to repo: ' . $config['repo']);
 	
 	$stringArray = explode("\n", $res);
-	$lineArray = explode(" ", $stringArray[0]);
+	$lineArray = explode("\t", $stringArray[0]);
 	$tag = trim($lineArray[0]);
 	
 	if (!preg_match('/^[A-fa-f0-9]{40}$/', $tag)) 
@@ -76,7 +76,7 @@ if (!$tag) {
 fwrite(STDOUT, "Deploying repository: ". $config['repo'] ."\n");
 fwrite(STDOUT, "Selected tag/ref: ". $tag ."\n");
 
-$workingDir = dirname(WEB_ROOT);
+$workingDir = dirname($webRoot);
 $newFolder = 'html_'. preg_replace('/[^A-Za-z0-9\.\-_]+/', '_', $tag);
 $newFolderAbs = $workingDir . DIRECTORY_SEPARATOR . $newFolder;
 
@@ -123,22 +123,22 @@ if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
 }
 
-if (!is_link(WEB_ROOT) && is_dir(WEB_ROOT)) {
+if (!is_link($webRoot) && is_dir($webRoot)) {
 	
 	fwrite(STDOUT, "Moving current web-root..." ."\n");
 	
-	exec('mv '. WEB_ROOT .' '. dirname(WEB_ROOT) . DIRECTORY_SEPARATOR .'html_orig', $out, $res);
+	exec('mv '. $webRoot .' '. dirname($webRoot) . DIRECTORY_SEPARATOR .'html_orig', $out, $res);
 	
 	if ($res !== 0) 
 		errorExit("Error: Could not move web root folder", implode("\n", $out));
 
 }
 
-if (is_link(WEB_ROOT)) {
+if (is_link($webRoot)) {
 
 	fwrite(STDOUT, "Un-linking web folder..." ."\n");
 	
-	exec('unlink '. WEB_ROOT, $out, $res);
+	exec('unlink '. $webRoot, $out, $res);
 	
 	if ($res !== 0)
 		errorExit("Error: Current symbolic link could not be removed", implode("\n", $out));
