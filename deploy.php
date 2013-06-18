@@ -68,7 +68,7 @@ if (!$tag) {
 	$lineArray = explode(" ", $stringArray[0]);
 	$tag = trim($lineArray[0]);
 	
-	if (!preg_match('^[A-fa-f0-9]{40}$/', $tag)) 
+	if (!preg_match('/^[A-fa-f0-9]{40}$/', $tag)) 
 		errorExit("Error: Could not identify last commit", implode("\n", $stringArray));
 		
 }
