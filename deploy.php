@@ -28,7 +28,7 @@ fwrite(STDOUT, "Target folder: ". $newFolderAbs ."\n");
 if (!is_dir($newFolderAbs)) {
 	// Create and clone the directory
 
-	echo "Cloning project..." ."\n";
+	fwrite(STDOUT, "Cloning project..." ."\n");
 
 	exec('git clone '. $config['repo'] .' '. $newFolderAbs, $out, $res);
 	
@@ -43,7 +43,7 @@ if (!is_dir($newFolderAbs)) {
 if (!chdir($newFolderAbs)) 
 	die('Error: Could not change directory to '. $newFolderAbs ."\n");
 
-echo "Checking out tag..." ."\n";
+fwrite(STDOUT, "Checking out tag..." ."\n");
 
 exec('git checkout '. $tag, $out, $res);
 
@@ -55,7 +55,7 @@ if ($res !== 0) {
 
 if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
-	echo "Running pre-deploy commands..." ."\n";
+	fwrite(STDOUT, "Running pre-deploy commands..." ."\n");
 	
 	foreach ($config['cmds'] as $command) {
 		
@@ -77,7 +77,7 @@ if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 
 if (!is_link(WEB_ROOT) && is_dir(WEB_ROOT)) {
 	
-	echo "Moving current web-root..." ."\n";
+	fwrite(STDOUT, "Moving current web-root..." ."\n");
 	
 	exec('mv '. WEB_ROOT .' '. dirname(WEB_ROOT) . DIRECTORY_SEPARATOR .'html_orig', $out, $res);
 	
@@ -91,7 +91,7 @@ if (!is_link(WEB_ROOT) && is_dir(WEB_ROOT)) {
 
 if (is_link(WEB_ROOT)) {
 
-	echo "Un-linking web folder..." ."\n";
+	fwrite(STDOUT, "Un-linking web folder..." ."\n");
 	
 	exec('unlink '. WEB_ROOT, $out, $res);
 	
@@ -103,7 +103,7 @@ if (is_link(WEB_ROOT)) {
 
 }
 
-echo "Re-linking web folder..." ."\n";
+fwrite(STDOUT, "Re-linking web folder..." ."\n");
 
 exec('ln -s '. $newFolderAbs .' '. $workingDir . DIRECTORY_SEPARATOR .'html', $out, $res);
 
@@ -113,4 +113,4 @@ if ($res !== 0) {
 	die;
 }
 
-echo "\n\n". "Deploy complete!" ."\n";
+fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
