@@ -47,13 +47,14 @@ do {
 	
 } while (next($argv));
 
-if (!file_exists($configFile) || !is_readable($configFile)) errorExit('Config file does not exist or is not readable: '. $configFile ."\n");
+if (!file_exists($configFile) || !is_readable($configFile)) 
+	errorExit('Config file does not exist or is not readable: '. $configFile);
 
 $config = file_get_contents($configFile);
 $config = json_decode($config, true);
 
-if (!is_array($config)) errorExit('Config file not valid JSON or is empty.' ."\n");
-if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository not specified in config file.' ."\n");
+if (!is_array($config)) errorExit('Config file not valid JSON or is empty.');
+if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository not specified in config file.');
 
 if (!$tag) {
 	
@@ -69,7 +70,7 @@ if (!$tag) {
 	$tag = trim($lineArray[0]);
 	
 	if (!preg_match('/^[A-fa-f0-9]{40}$/', $tag)) 
-		errorExit("Error: Could not identify last commit", implode("\n", $stringArray));
+		errorExit("Could not identify last commit", implode("\n", $stringArray));
 		
 }
  
@@ -90,19 +91,19 @@ if (!is_dir($newFolderAbs)) {
 	exec('git clone '. $config['repo'] .' '. $newFolderAbs, $out, $res);
 	
 	if ($res !== 0)
-		errorExit("Error: Git clone problem", implode("\n", $out));
+		errorExit("Git clone problem", implode("\n", $out));
 	
 }
 
 if (!chdir($newFolderAbs)) 
-	die('Error: Could not change directory to '. $newFolderAbs ."\n");
+	errorExit('Could not change directory to '. $newFolderAbs);
 
 fwrite(STDOUT, "Checking out tag..." ."\n");
 
 exec('git checkout '. $tag, $out, $res);
 
 if ($res !== 0)
-	errorExit("Error: Git checkout problem", implode("\n", $out));
+	errorExit("Git checkout problem", implode("\n", $out));
 
 if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
@@ -117,7 +118,7 @@ if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 		exec($command, $out, $res);
 			
 		if ($res !== 0)
-			errorExit("Error: Command could not be executed", implode("\n", $out));
+			errorExit("Command could not be executed", implode("\n", $out));
 
 	}
 	
@@ -130,7 +131,7 @@ if (!is_link($webRoot) && is_dir($webRoot)) {
 	exec('mv '. $webRoot .' '. dirname($webRoot) . DIRECTORY_SEPARATOR .'html_orig', $out, $res);
 	
 	if ($res !== 0) 
-		errorExit("Error: Could not move web root folder", implode("\n", $out));
+		errorExit("Could not move web root folder", implode("\n", $out));
 
 }
 
@@ -141,7 +142,7 @@ if (is_link($webRoot)) {
 	exec('unlink '. $webRoot, $out, $res);
 	
 	if ($res !== 0)
-		errorExit("Error: Current symbolic link could not be removed", implode("\n", $out));
+		errorExit("Current symbolic link could not be removed", implode("\n", $out));
 
 }
 
@@ -150,12 +151,12 @@ fwrite(STDOUT, "Re-linking web folder..." ."\n");
 exec('ln -s '. $newFolderAbs .' '. $workingDir . DIRECTORY_SEPARATOR .'html', $out, $res);
 
 if ($res !== 0)
-	errorExit("Error: Could not symbolically linking new folder", implode("\n", $out));
+	errorExit("Could not symbolically linking new folder", implode("\n", $out));
 
 fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
 
 function errorExit($string, $errInfo = false) {
-	fwrite(STDERR, $string ."\n");
+	fwrite(STDERR, 'Error: '. $string ."\n");
 	if ($errInfo) fwrite(STDERR, $errInfo ."\n");
 	exit(1);
 }
