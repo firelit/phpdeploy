@@ -1,6 +1,6 @@
 Overview
 --------
-This is a simple PHP deploy script. It clones a repository locally, checks out the specified tag and re-links the root web folder so the actual switch to the new production code bases is instantaneous (as long as it takes to remove one symbolic link and create a new one). Falling back to a previous version is also nearly instantaneous if the old version has not been removed from the server.
+This is a simple PHP deploy script. It clones a repository locally, checks out the specified tag and re-links the root web folder to the new code. The the actual switch from old code to new code is quite quick: it only takes the time necessary to remove a symbolic link and create a new one. Reverting back to a previous version is also quite speedy as long as the old version has not been removed from the server.
 
 Usage
 -----
