@@ -13,7 +13,7 @@ $webRoot = DEFAULT_WEB_ROOT;
 $configFile = DEFAULT_CONFIG_FILE;
 $historyFile = DEFAULT_HISTORY_FILE;
 $historyCLI = false;
-
+$remOld = true;
 $tag = false;
 
 do {
@@ -48,6 +48,11 @@ do {
 		
 		if ($webRoot === false)
 			errorExit('Invalid web root specified.');
+		
+	} elseif ($arg == '--no-rm') {
+		// No-remove old deployments
+		
+		$remOld = false;
 		
 	} elseif (!$tag) {
 		// Tag/commit/branch not set, must be this
@@ -206,17 +211,38 @@ if (!$rollback) {
 		
 	$targetDeploy = array(
 		'tag' => $tag,
+		'dir' => $newFolderAbs,
 		'date' => date('r')
 	);
 	
 	array_unshift($history, $targetDeploy);
+	
+	$oldHistory = array_slice($history, MAX_HISTORY);
 	$history = array_slice($history, 0, MAX_HISTORY);
 	
-}
+} else 
+	$oldHistory = array();
 
 $res = file_put_contents($historyFile, json_encode($history));
 
-if (!$res) fwrite(STDOUT, "\n". "WARNING: History file could not be written. Rollback command will not work." ."\n");
+if (!$res) fwrite(STDOUT, "\n". "WARNING: History file could not be written. Rollback command will not work.");
+
+if ($remOld && is_array($oldHistory) && sizeof($oldHistory)) {
+	
+	fwrite(STDOUT, "Removing old deployments..." ."\n");
+	
+	foreach ($oldHistory as $remDeploy) {
+		
+		exec('rm -rf '. $remDeploy['dir'], $out, $res);
+		
+		if ($res !== 0)
+			fwrite(STDOUT, "NOTE: Old deployment '". $remDeploy['dir'] ."' could not be removed." ."\n");
+			
+	}
+	
+	fwrite(STDOUT, "Done." ."\n");
+	
+}
 
 function errorExit($string, $errInfo = false) {
 	fwrite(STDERR, 'Error: '. $string ."\n");

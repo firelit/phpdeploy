@@ -13,6 +13,7 @@ At the command line call the deploy script and specify the tag (eg, v3.5), the c
 - `-f <json config file>` : Used to specify the location of the configuration file, defaults to `/var/www/deploy.json`.
 - `-h <json history file>` : Used to specify the location of the history file, defaults to `/var/www/deploy_history.json`. All deployments are recorded here to make rollbacks  quick and mindless.
 - `-w <web root>` : Used to specify the root public folder for the web server (will be replaced with symbolic link), defaults to `/var/www/html`.
+- `--no-rm` : Do not remove old deployments option. By default only the last 10 deployments are kept and any older ones are removed. This option overrides this.
 
 ### Examples
 Ideally, you'll tag your releases with version numbers. Your deployment can then reference the tag.
