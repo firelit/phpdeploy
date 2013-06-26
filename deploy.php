@@ -11,7 +11,7 @@ array_shift($argv);
 
 $webRoot = DEFAULT_WEB_ROOT;
 $configFile = DEFAULT_CONFIG_FILE;
-$historyFile = DEFAULT_CONFIG_FILE;
+$historyFile = DEFAULT_HISTORY_FILE;
 $historyCLI = false;
 
 $tag = false;
