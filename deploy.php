@@ -202,7 +202,7 @@ if ($res !== 0)
 
 fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
 
-if ($rollback) {
+if (!$rollback) {
 		
 	$targetDeploy = array(
 		'tag' => $tag,
