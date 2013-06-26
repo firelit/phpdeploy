@@ -229,7 +229,7 @@ if (!$res) fwrite(STDOUT, "\n". "WARNING: History file could not be written. Rol
 
 if ($remOld && is_array($oldHistory) && sizeof($oldHistory)) {
 	
-	fwrite(STDOUT, "Removing old deployments..." ."\n");
+	fwrite(STDOUT, "\n". "Removing old deployments..." ."\n");
 	
 	foreach ($oldHistory as $remDeploy) {
 		
