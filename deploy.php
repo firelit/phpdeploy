@@ -145,17 +145,25 @@ if (!is_dir($newFolderAbs)) {
 	if ($res !== 0)
 		errorExit("Git clone problem", implode("\n", $out));
 	
-}
+	$newClone = true;
+	
+} else
+	$newClone = false;
 
 if (!chdir($newFolderAbs)) 
 	errorExit('Could not change directory to '. $newFolderAbs);
 
-fwrite(STDOUT, "Checking out tag..." ."\n");
+if ($newClone) {
+	
+	fwrite(STDOUT, "Checking out tag..." ."\n");
+	
+	exec('git checkout '. $tag, $out, $res);
+	
+	if ($res !== 0)
+		errorExit("Git checkout problem", implode("\n", $out));
 
-exec('git checkout '. $tag, $out, $res);
-
-if ($res !== 0)
-	errorExit("Git checkout problem", implode("\n", $out));
+} else
+	fwrite(STDOUT, "Folder exists, skipping clone and checkout..." ."\n");
 
 if (is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
