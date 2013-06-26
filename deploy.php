@@ -76,13 +76,21 @@ if (!$historyCLI && isset($config['history']) && strlen($config['history'])) $hi
 if (!file_exists($historyFile) || !is_readable($historyFile))
 	errorExit('History file does not exist or is not readable: '. $historyFile);
 
-$history = file_get_contents($historyFile);
+if (file_exists($historyFile) && is_readable($historyFile)) {
+	
+	$history = file_get_contents($historyFile);
+	
+	$history = json_decode($history, true);
+		
+}
 
-$history = json_decode($history, true);
-if (!is_array($history)) $history = array();
+if (!$history || is_array($history)) $history = array();
 
 if (strtolower($tag) == 'rollback') {
 	
+	if (!file_exists($historyFile) || !is_readable($historyFile))
+		errorExit('History file does not exist or is not readable: '. $historyFile);
+
 	$rollback = true;
 	
 	if (!sizeof($history))
