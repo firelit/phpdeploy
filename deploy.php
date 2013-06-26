@@ -3,12 +3,17 @@
 
 define('DEFAULT_WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
 define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
+define('DEFAULT_HISTORY_FILE', '/var/www/deploy_history.json'); // Where to find the deploy history
+define('MAX_HISTORY', 10); // Only store the last 10 deployments in history
 
 // Remove script name
 array_shift($argv);
 
 $webRoot = DEFAULT_WEB_ROOT;
 $configFile = DEFAULT_CONFIG_FILE;
+$historyFile = DEFAULT_CONFIG_FILE;
+$historyCLI = false;
+
 $tag = false;
 
 do {
@@ -25,6 +30,16 @@ do {
 		
 		if ($configFile === false)
 			errorExit('Invalid config file specified.');
+		
+	} elseif ($arg == '-h') {
+		// History file option
+		
+		$historyFile = next($argv);
+		
+		if ($historyFile === false)
+			errorExit('Invalid history file specified.');
+		
+		$historyCLI = true;
 		
 	} elseif ($arg == '-w') {
 		// Web root option
@@ -55,6 +70,31 @@ $config = json_decode($config, true);
 
 if (!is_array($config)) errorExit('Config file not valid JSON or is empty.');
 if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository not specified in config file.');
+
+if (!$historyCLI && isset($config['history']) && strlen($config['history'])) $historyFile = $config['history'];
+
+if (!file_exists($historyFile) || !is_readable($historyFile))
+	errorExit('History file does not exist or is not readable: '. $historyFile);
+
+$history = file_get_contents($historyFile);
+
+$history = json_decode($history, true);
+if (!is_array($history)) $history = array();
+
+if (strtolower($tag) == 'rollback') {
+	
+	$rollback = true;
+	
+	if (!sizeof($history))
+		errorExit('History file contains no records to rollback to: '. $historyFile);
+		
+	$targetDeploy = array_shift($history);
+	
+	$tag = $targetDeploy['tag'];
+	
+	fwrite(STDOUT, "NOTE: Rolling back..." ."\n");
+	
+} else $rollback = false;
 
 if (!$tag) {
 	
@@ -151,9 +191,25 @@ fwrite(STDOUT, "Re-linking web folder..." ."\n");
 exec('ln -s '. $newFolderAbs .' '. $workingDir . DIRECTORY_SEPARATOR .'html', $out, $res);
 
 if ($res !== 0)
-	errorExit("Could not symbolically linking new folder", implode("\n", $out));
+	errorExit("Could not symbolically link new folder", implode("\n", $out));
 
 fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
+
+if ($rollback) {
+		
+	$targetDeploy = array(
+		'tag' => $tag,
+		'date' => date('r')
+	);
+	
+	array_unshift($history, $targetDeploy);
+	$history = array_slice($history, 0, MAX_HISTORY);
+	
+}
+
+$res = file_put_contents($historyFile, json_encode($history));
+
+if (!$res) fwrite(STDOUT, "\n". "WARNING: History file could not be written. Rollback command will not work." ."\n");
 
 function errorExit($string, $errInfo = false) {
 	fwrite(STDERR, 'Error: '. $string ."\n");
