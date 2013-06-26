@@ -73,9 +73,6 @@ if (!isset($config['repo']) || !strlen($config['repo'])) errorExit('Repository n
 
 if (!$historyCLI && isset($config['history']) && strlen($config['history'])) $historyFile = $config['history'];
 
-if (!file_exists($historyFile) || !is_readable($historyFile))
-	errorExit('History file does not exist or is not readable: '. $historyFile);
-
 if (file_exists($historyFile) && is_readable($historyFile)) {
 	
 	$history = file_get_contents($historyFile);
@@ -84,7 +81,7 @@ if (file_exists($historyFile) && is_readable($historyFile)) {
 		
 }
 
-if (!$history || is_array($history)) $history = array();
+if (!$history || !is_array($history)) $history = array();
 
 if (strtolower($tag) == 'rollback') {
 	
