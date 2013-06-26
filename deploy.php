@@ -88,7 +88,9 @@ if (strtolower($tag) == 'rollback') {
 	if (!sizeof($history))
 		errorExit('History file contains no records to rollback to: '. $historyFile);
 		
-	$targetDeploy = array_shift($history);
+	array_shift($history);
+	
+	$targetDeploy = $history[0];
 	
 	$tag = $targetDeploy['tag'];
 	
