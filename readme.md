@@ -32,6 +32,19 @@ The file should be in JSON format and contain the following keys.
 - cmds: array of shell commands to run just before deployment (use {FOLDER} to reference deployment folder)
 - history: (optional) the file used for keeping deployment history
 
+Example deploy.json config file:
+```js
+{
+	"repo":"git@github.com:myname\/myrepo.git",
+	"cmds":[
+    "cd {FOLDER} && curl -sS https://getcomposer.org/installer | php",
+    "cd {FOLDER} && php composer.phar install",
+    "rm -f {FOLDER}/composer.*",
+		"rm -rf {FOLDER}\/.git"
+	]
+}
+```
+
 ## Notes
 Uses git, thus git must be installed on the server. It is also beneficial to have setup deployment keys on the repository so that a github/ssh login is not required when cloning. Alternatively, you may be able to use [SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding) with this script, but it has not been tested.
 
