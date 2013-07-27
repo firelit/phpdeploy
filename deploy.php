@@ -165,7 +165,7 @@ if ($newClone) {
 } else
 	fwrite(STDOUT, "Folder exists, skipping clone and checkout..." ."\n");
 
-if (is_array($config['cmds']) && sizeof($config['cmds'])) {
+if (!$rollback && is_array($config['cmds']) && sizeof($config['cmds'])) {
 	
 	fwrite(STDOUT, "Running pre-deploy commands..." ."\n");
 	
