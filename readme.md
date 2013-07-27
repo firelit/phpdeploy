@@ -37,9 +37,9 @@ Example deploy.json config file:
 {
   "repo":"git@github.com:myname\/myrepo.git",
   "cmds":[
-    "cd {FOLDER} && curl -sS https://getcomposer.org/installer | php",
+    "cd {FOLDER} && curl -sS https:\/\/getcomposer.org\/installer | php",
     "cd {FOLDER} && php composer.phar install",
-    "rm -f {FOLDER}/composer.*",
+    "rm -f {FOLDER}\/composer.*",
     "rm -rf {FOLDER}\/.git"
   ]
 }
