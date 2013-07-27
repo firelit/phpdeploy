@@ -35,13 +35,13 @@ The file should be in JSON format and contain the following keys.
 Example deploy.json config file:
 ```js
 {
-	"repo":"git@github.com:myname\/myrepo.git",
-	"cmds":[
+  "repo":"git@github.com:myname\/myrepo.git",
+  "cmds":[
     "cd {FOLDER} && curl -sS https://getcomposer.org/installer | php",
     "cd {FOLDER} && php composer.phar install",
     "rm -f {FOLDER}/composer.*",
-		"rm -rf {FOLDER}\/.git"
-	]
+    "rm -rf {FOLDER}\/.git"
+  ]
 }
 ```
 
