@@ -4,7 +4,7 @@
 define('DEFAULT_WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
 define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
 define('DEFAULT_HISTORY_FILE', '/var/www/deploy_history.json'); // Where to find the deploy history
-define('MAX_HISTORY', 10); // Only store the last 10 deployments in history
+define('MAX_HISTORY', 15); // Only store the last 10 deployments in history
 
 // Remove script name
 array_shift($argv);
