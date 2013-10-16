@@ -213,6 +213,19 @@ exec('ln -s '. $newFolderAbs .' '. $workingDir . DIRECTORY_SEPARATOR .'html', $o
 if ($res !== 0)
 	errorExit("Could not symbolically link new folder", implode("\n", $out));
 
+
+fwrite(STDOUT, "Restarting web server..." ."\n");
+
+exec('apachectl configtest', $out, $res);
+
+if ($res !== 0)
+	errorExit("Apache configuration failed test; web server not restarted", implode("\n", $out));
+
+exec('service httpd restart', $out, $res);
+
+if ($res !== 0)
+	errorExit("Apache restart failed!!", implode("\n", $out));
+
 fwrite(STDOUT, "\n\n". "Deploy complete!" ."\n");
 
 if (!$rollback) {
