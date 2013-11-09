@@ -1,11 +1,6 @@
 #!/usr/bin/php
 <?PHP
 
-define('DEFAULT_WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
-define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
-define('DEFAULT_HISTORY_FILE', '/var/www/deploy_history.json'); // Where to find the deploy history
-define('MAX_HISTORY', 15); // Only store the last 10 deployments in history
-
 require_once('vendor/autoload.php');
 
 use Symfony\Component\Console\Application;
@@ -20,6 +15,17 @@ $application->add(new RollbackCommand);
 $application->run();
 
 exit;
+
+
+
+
+
+/////// OLD - TODO: REMOVE
+
+define('DEFAULT_WEB_ROOT', '/var/www/html'); // What folder Apache is serving up, will become a symbolic link
+define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the deploy.json configuration
+define('DEFAULT_HISTORY_FILE', '/var/www/deploy_history.json'); // Where to find the deploy history
+define('MAX_HISTORY', 15); // Only store the last 10 deployments in history
 
 // Remove script name
 array_shift($argv);
