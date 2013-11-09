@@ -6,6 +6,21 @@ define('DEFAULT_CONFIG_FILE', '/var/www/deploy.json'); // Where to find the depl
 define('DEFAULT_HISTORY_FILE', '/var/www/deploy_history.json'); // Where to find the deploy history
 define('MAX_HISTORY', 15); // Only store the last 10 deployments in history
 
+require_once('vendor/autoload.php');
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+$application = new Application();
+$application->add(new DeployCommand);
+$application->add(new RollbackCommand);
+$application->run();
+
+exit;
+
 // Remove script name
 array_shift($argv);
 

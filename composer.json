@@ -1,0 +1,17 @@
+{
+    "name": "firelit/phpdeploy",
+    "type": "library",
+    "description": "PHP Deploy script - deploy GIT-based project to Apache web server",
+    "license": "MIT",
+    "require": {
+    	"php": ">=5.3",
+    	"symfony/console": "2.4.*@dev"
+    },
+    "autoload": {
+    	"psr-0": { "": "src/" }
+    },
+	"authors": [{
+		"name": "Eric Bigoness",
+		"email": "eric.bigoness@firelit.com"
+	}]
+}
