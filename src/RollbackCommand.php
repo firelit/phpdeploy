@@ -8,6 +8,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RollbackCommand extends Command {
 
+    const DEFAULT_WEB_ROOT = '/var/www/html';
+    
     protected function configure() {
 
         $this
