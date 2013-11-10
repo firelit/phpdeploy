@@ -1,6 +1,6 @@
 {
     "name": "firelit/phpdeploy",
-    "type": "library",
+    "type": "project",
     "description": "PHP Deploy script - deploy GIT-based project to Apache web server",
     "license": "MIT",
     "require": {
