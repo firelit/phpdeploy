@@ -6,13 +6,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DeployCommand extends Command
-{
+class DeployCommand extends Command {
 
     const DEFAULT_WEB_ROOT = '/var/www/html';
 
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->setName('deploy')
             ->setDescription('Deploy a new version')
@@ -25,8 +23,7 @@ class DeployCommand extends Command
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
 
         $configFile = $input->getOption('config');
 
@@ -50,11 +47,6 @@ class DeployCommand extends Command
         $historyFile = $input->getOption('history');
         if (!$historyFile) $historyFile = $config->history;
 
-        if (!$historyFile) {
-            $output->writeln('<error>History file not specified at CLI nor in config file.</error>');
-            exit(1);
-        }
-
         try {
             
             $history = new DeployHistory($historyFile);
@@ -65,6 +57,7 @@ class DeployCommand extends Command
         }
 
         $webRoot = $input->getOption['web-root'];
+        if (!$webRoot) $webRoot = $config->web;
         if (!$webRoot) $webRoot = self::DEFAULT_WEB_ROOT;
 
         $tag = $input->getArgument('tag|branch');
@@ -112,13 +105,9 @@ class DeployCommand extends Command
                 exit(1);
             }
             
-            $newClone = true;
-            
         } else {
 
             $output->writeln('Target folder already exists. Skipping clone.');
-
-            $newClone = false;
 
         }
 
@@ -261,7 +250,7 @@ class DeployCommand extends Command
 
         if (!$res) {
             
-            $output->writeln('<error>History file could not be updated!!</error>');
+            $output->writeln('<error>History file could not be updated!</error>');
             
             if ($removeOld) 
                 $output->writeln('Skipping removal of old deployments.');

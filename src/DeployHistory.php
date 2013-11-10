@@ -3,20 +3,47 @@
 class DeployHistory {
 
 	const MAX_HISTORY = 15;
+	const DEFAULT_FILE = '/var/www/history.json';
+
+	public $history = array();
 
 	protected 
-		$history = array(),
 		$file = false,
 		$max = MAX_HISTORY,
 		$old = array();
 
-	public function __construct($file) {
+	public function __construct($file = false) {
+
+		if (!$file) {
+
+			// Try a few different possibilities
+			$try = array(
+				getcwd() . 'history.json',
+				getcwd() . 'deploy_history.json',
+				'/var/www/history.json',
+				'/var/www/deploy_history.json'
+			);
+
+			foreach ($try as $file) {
+				if (file_exists($file)) break;
+			}
+
+			if (!file_exists($file))
+				$file = self::DEFAULT_FILE;
+
+		}
+
+		$this->loadFile($file);
+
+	}
+
+	public function loadFile($file) {
 
 		$this->file = $file;
 
 		if (file_exists($file) && is_readable($file)) {
 			
-			$history = file_get_contents($historyFile);
+			$history = file_get_contents($file);
 			$this->history = json_decode($history, true);
 
 			if (strlen($history) && !$this->history) 
@@ -26,7 +53,7 @@ class DeployHistory {
 			throw new Excpetion('History file is not readable.');
 		}
 
-		if (!file_exists($file) && !@touch($file))
+		if (!file_exists($file) && !touch($file))
 			throw new Exception('History file could not be created.');
 
 		if (!is_writable($file))
@@ -42,7 +69,7 @@ class DeployHistory {
 	}
 
 	public function setMaxHistory($max) {
-		$this->maxHistory = $max;
+		$this->max = $max;
 	}
 
 	public function addHistory($tag, $dir, $remOld = true, $date = false) {
@@ -61,8 +88,12 @@ class DeployHistory {
 
 		}
 		
-		return file_put_contents($this->file, json_encode($this->history));
+		return $this->save();
 
+	}
+
+	public function save() {
+		return file_put_contents($this->file, json_encode($this->history));
 	}
 
 }
