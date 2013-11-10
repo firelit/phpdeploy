@@ -41,18 +41,18 @@ class DeployConfig {
 		$this->file = $file;
 
 		if (!file_exists($file) || !is_readable($file)) {
-        	throw new Exception('Configuration file does not exist or is not readable.');
+        	throw new InvalidFileException('Configuration file does not exist or is not readable.');
 		}
 
 		$config = file_get_contents($file);
 
 		if (!$config || !strlen($config)) 
-			throw new Exception('Configuration file could not be read or is empty.');
+			throw new InvalidFileException('Configuration file could not be read or is empty.');
 
 		$config = json_decode($config, true);
 
-		if (!$config || !is_array($config)) 
-			throw new Exception('Configuration file not valid JSON or is empty.');
+		if (is_null($config) || !is_array($config)) 
+			throw new InvalidFileException('Configuration file not valid JSON or is empty.');
 
 		if (isset($config['repo']))
 			$this->repo = $config['repo'];
@@ -65,7 +65,7 @@ class DeployConfig {
 
 		if (isset($config['web-root']))
 			$this->web = $config['web-root'];
-		
+
 	}
 
 	public function __get($var) {

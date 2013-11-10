@@ -9,8 +9,9 @@ class DeployHistory {
 
 	protected 
 		$file = false,
-		$max = MAX_HISTORY,
-		$old = array();
+		$max = self::MAX_HISTORY,
+		$old = array(),
+		$skipSave = false;
 
 	public function __construct($file = false) {
 
@@ -45,19 +46,19 @@ class DeployHistory {
 			
 			$history = file_get_contents($file);
 			$this->history = json_decode($history, true);
-
-			if (strlen($history) && !$this->history) 
-				throw new Exception('History file does not contain valid JSON. Fix or remove file.');
+			
+			if (strlen($history) && is_null($this->history))
+				throw new InvalidFileException('History file does not contain valid JSON. Fix or remove file.');
 				
 		} elseif (file_exists($file) && !is_readable($file)) {
-			throw new Excpetion('History file is not readable.');
+			throw new InvalidFileException('History file is not readable.');
 		}
 
-		if (!file_exists($file) && !touch($file))
-			throw new Exception('History file could not be created.');
+		if (!file_exists($file) && !@touch($file))
+			throw new InvalidFileException('History file could not be created.');
 
 		if (!is_writable($file))
-			throw new Exception('History file is not writable.');
+			throw new InvalidFileException('History file is not writable.');
 
 		if (!$this->history || !is_array($this->history)) 
 			$this->history = array();
@@ -88,8 +89,6 @@ class DeployHistory {
 
 		}
 		
-		return $this->save();
-
 	}
 
 	public function save() {

@@ -31,7 +31,7 @@ class DeployCommand extends Command {
             
             $config = new DeployConfig($configFile);
 
-        } catch (Exception $e) {
+        } catch (InvalidFileException $e) {
             $output->writeln('<error>'. $e->getMessage() .'</error>');
             exit(1);
         }
@@ -51,7 +51,7 @@ class DeployCommand extends Command {
             
             $history = new DeployHistory($historyFile);
 
-        } catch (Exception $e) {
+        } catch (InvalidFileException $e) {
             $output->writeln('<error>'. $e->getMessage() .'</error>');
             exit(1);
         }
@@ -246,8 +246,9 @@ class DeployCommand extends Command {
 
         $removeOld = !$this->getOption('no-rm');
 
-        $res = $history->addHistory($tag, $newFolderAbs, $removeOld);
-
+        $history->addHistory($tag, $newFolderAbs, $removeOld);
+        $res = $history->save();
+        
         if (!$res) {
             
             $output->writeln('<error>History file could not be updated!</error>');

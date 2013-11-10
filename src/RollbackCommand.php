@@ -30,7 +30,7 @@ class RollbackCommand extends Command {
             
             $config = new DeployConfig($configFile);
 
-        } catch (Exception $e) {
+        } catch (InvalidFileException $e) {
             $output->writeln('<error>'. $e->getMessage() .'</error>');
             exit(1);
         }
@@ -55,7 +55,7 @@ class RollbackCommand extends Command {
             
             $history = new DeployHistory($historyFile);
 
-        } catch (Exception $e) {
+        } catch (InvalidFileException $e) {
             $output->writeln('<error>'. $e->getMessage() .'</error>');
             exit(1);
         }
