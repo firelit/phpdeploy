@@ -1,9 +1,13 @@
 ## PHP Deploy 
 [![Build Status](https://travis-ci.org/firelit/phpdeploy.png?branch=master)](https://travis-ci.org/firelit/phpdeploy)
+
 This is a simple PHP deploy script. It clones a git repository locally, checks out the specified tag and re-links the root web folder to the new code. The the actual switch from old code to new code is quite quick: it only takes the time necessary to remove a symbolic link and create a new one. Reverting back to a previous version is also quite speedy as long as the old version has not been removed from the server.
 
 ## Usage
 Requires PHP >= 5.3 (earlier versions untested)
+
+### Installing
+First, clone this project (or download the zip). Second, install dependencies with [Composer](http://getcomposer.org/doc/00-intro.md) (eg, `php composer.phar install`). That's it!
 
 ### Command Line Format
 At the command line call the deploy script and specify the tag (eg, v3.5), the commit (eg, da83f01) or the branch to deploy. If you don't specify any of these, the latest code (HEAD) will be used.
