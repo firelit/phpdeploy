@@ -1,4 +1,5 @@
 ## PHP Deploy 
+[![Build Status](https://travis-ci.org/firelit/phpdeploy.png?branch=master)](https://travis-ci.org/firelit/phpdeploy)
 This is a simple PHP deploy script. It clones a git repository locally, checks out the specified tag and re-links the root web folder to the new code. The the actual switch from old code to new code is quite quick: it only takes the time necessary to remove a symbolic link and create a new one. Reverting back to a previous version is also quite speedy as long as the old version has not been removed from the server.
 
 ## Usage
