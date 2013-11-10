@@ -30,6 +30,7 @@ The config file should be in JSON format and contain the following keys.
 - repo: the repo's SSH link (eg, "git@github.com:myusername/myrepositoryname.git")
 - cmds: array of shell commands to run just before deployment (use {FOLDER} to reference deployment folder)
 - history: (optional) the file used for keeping deployment history
+- web-root: (optional) the location of the web server's root folder
 
 Example deploy.json config file:
 ```js

@@ -11,6 +11,7 @@ class DeployCommand extends Command {
     const DEFAULT_WEB_ROOT = '/var/www/html';
 
     protected function configure() {
+        
         $this
             ->setName('deploy')
             ->setDescription('Deploy a new version')
