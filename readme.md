@@ -31,11 +31,11 @@ You can rollback a deployment quickly with 'rollback'. It simply reverts to the 
 ### Config File
 A config file is required and its location can be specified with the `-c` option. If not specified it automatically checks a few places for this file including `/var/www/deploy.json` and `deploy.json` in the current working directory.
 
-The config file should be in JSON format and contain the following keys.
+The config file should be in JSON format and contain the following keys. Remeber that each key is optional as some can also be specified at the command line.
 - repo: the repo's SSH link (eg, "git@github.com:myusername/myrepositoryname.git")
 - cmds: array of shell commands to run just before deployment (use {FOLDER} to reference deployment folder)
-- history: (optional) the file used for keeping deployment history
-- web-root: (optional) the location of the web server's root folder
+- history: the file used for keeping deployment history
+- web-root: the location of the web server's root folder
 
 Example deploy.json config file:
 ```js
