@@ -18,6 +18,7 @@ class RollbackCommand extends Command {
             ->addOption('config', 'c', InputOption::VALUE_REQUIRED, 'Location of configuration file')
             ->addOption('history', 'y', InputOption::VALUE_REQUIRED, 'Location of history file')
             ->addOption('web-root', 'w', InputOption::VALUE_REQUIRED, 'Root web folder')
+            ->addOption('no-rm', null, InputOption::VALUE_NONE, 'Do not remove old web root after rolling back')
             ->addOption('run-cmds', 'r', InputOption::VALUE_NONE, 'Re-run pre-deploy commands on old version');
 
     }
