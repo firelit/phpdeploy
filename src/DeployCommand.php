@@ -57,7 +57,7 @@ class DeployCommand extends Command {
             exit(1);
         }
 
-        $webRoot = $input->getOption['web-root'];
+        $webRoot = $input->getOption('web-root');
         if (!$webRoot) $webRoot = $config->web;
         if (!$webRoot) $webRoot = self::DEFAULT_WEB_ROOT;
 
@@ -245,7 +245,7 @@ class DeployCommand extends Command {
 
         $output->writeln('<info>Deploy Complete!</info>');
 
-        $removeOld = !$this->getOption('no-rm');
+        $removeOld = !$input->getOption('no-rm');
 
         $history->addHistory($tag, $newFolderAbs, $removeOld);
         $res = $history->save();
