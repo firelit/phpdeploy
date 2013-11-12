@@ -38,11 +38,6 @@ class RollbackCommand extends Command {
         $historyFile = $input->getOption('history');
         if (!$historyFile) $historyFile = $config->history;
 
-        if (!$historyFile) {
-            $output->writeln('<error>History file not specified at CLI nor in config file.</error>');
-            exit(1);
-        }
-
         try {
             
             $history = new DeployHistory($historyFile);
