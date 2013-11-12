@@ -35,14 +35,6 @@ class RollbackCommand extends Command {
             exit(1);
         }
 
-        $repo = $input->getOption('repo');
-        if (!$repo) $repo = $config->repo;
-
-        if (!$repo) {
-            $output->writeln('<error>Repo not specified at CLI nor in config file.</error>');
-            exit(1);
-        }
-
         $historyFile = $input->getOption('history');
         if (!$historyFile) $historyFile = $config->history;
 
