@@ -52,7 +52,7 @@ class RollbackCommand extends Command {
             exit(1);
         }
 
-        $webRoot = $input->getOption['web-root'];
+        $webRoot = $input->getOption('web-root');
         if (!$webRoot) $webRoot = $config->web;
         if (!$webRoot) $webRoot = self::DEFAULT_WEB_ROOT;
 
@@ -209,7 +209,7 @@ class RollbackCommand extends Command {
 
         $output->writeln('<info>Rollback Complete!</info>');
 
-        $removeOld = !$this->getOption('no-rm');
+        $removeOld = !$input->getOption('no-rm');
 
         $res = $history->save();
 
