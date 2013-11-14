@@ -1,10 +1,10 @@
 ## PHP Deploy 
 [![Build Status](https://travis-ci.org/firelit/phpdeploy.png?branch=master)](https://travis-ci.org/firelit/phpdeploy)
 
-This is a simple PHP deploy script. It clones a git repository locally, checks out the specified tag and re-links the root web folder to the new code. The the actual switch from old code to new code is quite quick: it only takes the time necessary to remove a symbolic link and create a new one. Reverting back to a previous version is also quite speedy as long as the old version has not been removed from the server.
+This is a simple PHP deploy script. It clones a Git repository locally, checks out the specified tag and re-links the root web folder to the new code. The the actual switch from old code to new code is quite quick: it only takes the time necessary to remove a symbolic link and create a new one. Reverting back to a previous version is also quite speedy as long as the old version has not been removed from the server.
 
 ## Usage
-Requires PHP >= 5.3 (earlier versions untested)
+Requires PHP >= 5.3 (earlier versions untested) & Git
 
 ### Installing
 First, clone this project (or download the zip). Second, install dependencies with [Composer](http://getcomposer.org/doc/00-intro.md) (eg, `php composer.phar install`). That's it!
@@ -51,9 +51,9 @@ Example deploy.json config file:
 ```
 
 ## Notes
-Uses git, thus git must be installed on the server. It is also beneficial to have setup deployment keys on the repository so that a github/ssh login is not required when cloning. Alternatively, you may be able to use [SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding) with this script, but it has not been tested.
+Uses Git, thus Git must be installed on the server. It is also beneficial to have setup deployment keys on the repository so that a github/ssh login is not required when cloning. Alternatively, you may be able to use [SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding) with this script, but it has not been tested.
 
-When cloning a repo for deployment a shallow clone is made. This increases speed because very little history is being copied with the repo. This is appropriate for most uses. It also means that you shouldn't treat it like a normal repo. If you make changes to the repo and want to share, you'll have to do so as a patch instead of a normal git push.
+When cloning a repo for deployment a shallow clone is made. This increases speed because very little history is being copied with the repo. This is appropriate for most uses. It also means that you shouldn't treat it like a normal repo. If you make changes to the repo and want to share, you'll have to do so as a patch instead of a normal Git push.
 
 ### License
 
