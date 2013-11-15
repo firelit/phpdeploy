@@ -125,6 +125,7 @@ class DeployCommand extends Command {
             foreach ($config->cmds as $i => $command) {
                 
                 $command = str_replace('{FOLDER}', $newFolderAbs, $command);
+                $command = str_replace('{TAG}', $tag, $command);
                 
                 if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
                     $output->writeln('['.$i.'] '. $command);
