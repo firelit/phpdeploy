@@ -92,7 +92,7 @@ class DeployCommand extends Command {
 
             $output->writeln('<info>Cloning Repository...</info>');
 
-            $exec = 'git clone '. $repo .' -b '. $tag .' --depth 1 '. $newFolderAbs;
+            $exec = 'git clone --recurse-submodules -b '. $tag .' --depth 1 '. $repo .' '. $newFolderAbs;
 
             if (OutputInterface::VERBOSITY_VERY_VERBOSE <= $output->getVerbosity())
                 $output->writeln($exec);
